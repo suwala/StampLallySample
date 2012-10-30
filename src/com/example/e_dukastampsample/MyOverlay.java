@@ -1,11 +1,18 @@
 package com.example.e_dukastampsample;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
@@ -16,21 +23,27 @@ public class MyOverlay extends MyLocationOverlay {
 	
 	private MainActivity main;
 	private MapView map;
+	private GeoPoint myGp=null;
 	
 	public MyOverlay(Context context, MapView mapView) {
 		super(context, mapView);
 		// TODO 自動生成されたコンストラクター・スタブ
 		this.main = (MainActivity)context;
 		this.map = mapView;
+		
+		//暫定処理
+		//this.myGp = new GeoPoint(33555169, 130308480);
 	}
 	
 	
 	@Override
 	public synchronized boolean draw(Canvas canvas, MapView mapView,
-			boolean shadow, long when) {
+			boolean shadow,long when) {
 		// TODO 自動生成されたメソッド・スタブ
 		
-		if(!shadow){
+		super.draw(canvas, mapView, shadow);
+		
+		if(!shadow){			
 			for(GeoPoint g:this.main.gp){
 				Projection projection = this.map.getProjection();
 				Point point = projection.toPixels(g, null);
@@ -45,8 +58,24 @@ public class MyOverlay extends MyLocationOverlay {
 				paint.setStyle(Paint.Style.FILL);
 				paint.setColor(Color.argb(0x22, 0x33, 0x99, 0xFF));
 				canvas.drawCircle(point.x, point.y,pixel, paint);
+				
+				
 			}
-					
+			
+			if(this.myGp != null){
+				Projection projection = this.map.getProjection();
+				Point point = new Point();
+				projection.toPixels(myGp, point);
+				Bitmap icon = BitmapFactory.decodeResource(this.main.getResources(), R.drawable.icon03);
+								
+				int halfWidth = icon.getWidth()/2;
+				Rect bound = new Rect(point.x-halfWidth,point.x+halfWidth,point.y-icon.getHeight(),point.y);
+				
+				canvas.drawBitmap(icon, point.x, point.y, null);
+				
+				Log.d("aaa","aaa");
+				
+			}
 		}
 		
 		return super.draw(canvas, mapView, shadow, when);
@@ -56,8 +85,13 @@ public class MyOverlay extends MyLocationOverlay {
 	public synchronized void onLocationChanged(Location location) {
 		// TODO 自動生成されたメソッド・スタブ
 		super.onLocationChanged(location);
+		
+		this.myGp = new GeoPoint((int)(location.getLatitude()*1e6), (int)(location.getLongitude()*1e6));
+	
 	}
 
-	
+	public GeoPoint getMyGeoPoint(){
+		return this.myGp;
+	}
 
 }

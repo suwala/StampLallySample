@@ -68,34 +68,8 @@ public class MainActivity extends MapActivity {
         this.gp.add(new GeoPoint((int)(33.643536*1e6),(int)(130.691459*1e6)));
         
         ctrl.setCenter(this.gp.get(0));
-        ctrl.setZoom(19);
-        
-        /*
-        this.myLocationOverlay = new MyLocationOverlay(this, this.map);
-        //使用する位置情報プロバイダを指定
-        this.myLocationOverlay.onProviderEnabled(LocationManager.GPS_PROVIDER);
-        //自位置の追跡を有効に　マーカー付き！
-        this.myLocationOverlay.enableMyLocation();
-        
-        //最初に位置情報が確定したときに走る
-        this.myLocationOverlay.runOnFirstFix(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO 自動生成されたメソッド・スタブ
-				//GPS情報を元に現在地へ移動
-					ctrl.animateTo(myLocationOverlay.getMyLocation());
-					
-					//自位置追跡の無効化　マーカも消える！
-					myLocationOverlay.disableMyLocation();
-			}
-		});
-
-        //Overlayの追加と再描画
-        map.getOverlays().add(myLocationOverlay);
-        map.invalidate();
-         */
-        
+        ctrl.setZoom(2);
+               
         this.myOverlay = new MyOverlay(this, this.map);
         //使用する位置情報プロバイダを指定
         this.myOverlay.onProviderDisabled(LocationManager.GPS_PROVIDER);
@@ -111,13 +85,18 @@ public class MainActivity extends MapActivity {
         		//ctrl.animateTo(myOverlay.getMyLocation());
 
         		//自位置追跡の無効化　マーカも消える！　
-        		//myOverlay.disableMyLocation();
+                myOverlay.disableMyLocation();
+        		Log.d("main","main");
         	}
-		});
+        });
+        //コンパスの有効化　描画もされる
+        //this.myOverlay.enableCompass();
         
+        
+        //Overlayの追加と再描画
         this.map.getOverlays().add(this.myOverlay);
         this.map.invalidate();
-     
+
     }
     
 
@@ -153,6 +132,17 @@ public class MainActivity extends MapActivity {
     }
     
     @Override
+	protected void onStop() {
+		// TODO 自動生成されたメソッド・スタブ
+		super.onStop();
+		
+		//サービス停止を忘れずに
+		this.myOverlay.disableMyLocation();
+		this.myOverlay.disableCompass();
+	}
+
+
+	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
@@ -227,6 +217,10 @@ public class MainActivity extends MapActivity {
 		}
 
 		this.drawStamp();
+		GeoPoint gp = this.myOverlay.getMyGeoPoint();
+		/*if(gp!=null)
+			this.ctrl.setCenter(gp);
+		*/
 		return super.onTouchEvent(event);
 	}
 
