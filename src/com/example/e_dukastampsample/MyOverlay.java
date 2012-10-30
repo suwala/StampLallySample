@@ -1,5 +1,7 @@
 package com.example.e_dukastampsample;
 
+import java.util.Map;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -73,9 +75,43 @@ public class MyOverlay extends MyLocationOverlay {
 				
 				canvas.drawBitmap(icon, point.x, point.y, null);
 				
-				Log.d("aaa","aaa");
 				
 			}
+			//画面に表示されてる範囲（高さ）452-1804<zoomLV22-19>単位が不明　緯度（経度）の差?
+			Integer top = mapView.getLatitudeSpan();
+			Log.d("draw",top.toString());
+			GeoPoint gp = map.getMapCenter();
+			float[] result=new float[1];
+			if(this.myGp!=null)
+				Location.distanceBetween((double)gp.getLatitudeE6()/1e6, (double)gp.getLongitudeE6()/1e6, (double)this.myGp.getLatitudeE6()/1e6, (double)this.myGp.getLongitudeE6()/1e6,result);
+			//家との距離27434.605
+			Log.d("draw",String.valueOf(result[0]));
+			int lat_span = map.getLatitudeSpan();
+			int lng_span = map.getLongitudeSpan();
+			
+			//画面上端の緯度　myGP<=north myGP>=south myGP<=east myGP>=west　を満たせば画面内にいる
+			int north = (gp.getLongitudeE6()+(lng_span/2));
+			int south = gp.getLongitudeE6() - (lng_span/2);
+			int west = gp.getLatitudeE6() + lat_span/2;
+			int east = gp.getLatitudeE6() - lat_span/2;
+			
+			Log.d("darw","北："+String.valueOf(north)+"南："+String.valueOf(south)+"東："+String.valueOf(west)+"西："+String.valueOf(east));
+			
+			if(this.myGp!=null){
+			if(this.myGp.getLongitudeE6() >= north){
+				Log.d("draw","北にいます");
+			}
+			if(this.myGp.getLongitudeE6() <= south){
+				Log.d("draw","南にいます");
+			}
+			if(this.myGp.getLatitudeE6() >= west){
+				Log.d("draw","東にいます");
+			}
+			if(this.myGp.getLatitudeE6() <= east){
+				Log.d("draw","西にいます");
+			}
+			}
+			Log.d("draw_span",String.valueOf(north));
 		}
 		
 		return super.draw(canvas, mapView, shadow, when);

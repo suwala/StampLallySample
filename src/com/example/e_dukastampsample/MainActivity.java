@@ -68,7 +68,7 @@ public class MainActivity extends MapActivity {
         this.gp.add(new GeoPoint((int)(33.643536*1e6),(int)(130.691459*1e6)));
         
         ctrl.setCenter(this.gp.get(0));
-        ctrl.setZoom(2);
+        ctrl.setZoom(19);
                
         this.myOverlay = new MyOverlay(this, this.map);
         //使用する位置情報プロバイダを指定
@@ -178,13 +178,15 @@ public class MainActivity extends MapActivity {
         	else
         		bmp2 = BitmapFactory.decodeResource(getResources(),R.drawable.stampoff);
         
-        	//描画する位置の指定
+        	//描画する範囲　引き延ばされる
         	Rect rect = new Rect(x, y, x+this.height/3/2, y+this.height/3/2);
-        	//
+        	//Rect rect = new Rect(x, y, x+bmp2.getWidth(), y+bmp2.getHeight());
+        	
         	canvas.drawBitmap(bmp2, new Rect(0,0,bmp2.getWidth(),bmp2.getHeight()), rect,null);
         	Log.d("draw",rect.toString());
         	
-        	this.rectList.add(rect);
+        	//iv.getTop()　ImageViewの画面上における座標を返す
+        	this.rectList.add(new Rect(rect.left,rect.top+iv.getTop(),rect.right,rect.bottom+iv.getTop()));
         	x+=this.weight/3;
         	if(i==2){
         		x=0;
@@ -201,7 +203,6 @@ public class MainActivity extends MapActivity {
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO 自動生成されたメソッド・スタブ
 		
-		Log.d("touch",String.valueOf(event.getY()));
 		Float x=event.getX();
 		Float y=event.getY();
 		Integer i=0;
