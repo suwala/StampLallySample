@@ -31,6 +31,14 @@
             android:layout_height="wrap_content"
             android:text="TextView" />
 
+        <Button
+            android:id="@+id/button1"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MyGP" 
+            android:onClick="myGp"/>
+
     </LinearLayout>
 
     <ImageView
@@ -47,7 +55,7 @@
         android:layout_height="fill_parent"
         android:enabled="true"
         android:clickable="false"
-        android:apiKey="0TFDn7Nw19xiiIkbQyuq_OP7Az2gFGVzqyigDQA"
+        android:apiKey="0gQIw8VysdzYTMbMyoitC-iJ6bNvqOcqMFFsaMQ"
         />
 
 </LinearLayout>

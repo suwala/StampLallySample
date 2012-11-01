@@ -219,10 +219,17 @@ public class MainActivity extends MapActivity {
 
 		this.drawStamp();
 		GeoPoint gp = this.myOverlay.getMyGeoPoint();
-		/*if(gp!=null)
-			this.ctrl.setCenter(gp);
-		*/
+		
 		return super.onTouchEvent(event);
+	}
+	
+	public void myGp(View v){
+		
+		GeoPoint gp = this.myOverlay.getMyGP();
+		if(gp!=null){
+			this.ctrl.setCenter(gp);
+		}
+			
 	}
 
     
