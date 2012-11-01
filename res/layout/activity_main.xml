@@ -15,7 +15,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="拡大" 
-            android:onClick="mapZoom"/>
+            android:onClick="mapZoom"
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/zoomout"
@@ -23,13 +24,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="縮小"
-            android:onClick="mapZoom"/>
+            android:onClick="mapZoom"
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="TextView" 
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/button1"
@@ -38,6 +41,42 @@
             android:layout_height="wrap_content"
             android:text="MyGP" 
             android:onClick="myGp"/>
+
+        <Button
+            android:id="@+id/btntop"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="↑" 
+            android:layout_weight="1"
+            android:onClick="arrow"/>
+
+        <Button
+            android:id="@+id/btnbottom"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="↓"
+            android:layout_weight="1"
+            android:onClick="arrow" />
+
+        <Button
+            android:id="@+id/btnrigth"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="→" 
+            android:layout_weight="1"
+            android:onClick="arrow"/>
+        
+        <Button
+            android:id="@+id/btnleft"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="←" 
+            android:layout_weight="1"
+            android:onClick="arrow"/>
 
     </LinearLayout>
 

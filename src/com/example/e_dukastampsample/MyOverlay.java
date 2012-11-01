@@ -3,6 +3,7 @@ package com.example.e_dukastampsample;
 import java.util.Map;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -35,7 +36,7 @@ public class MyOverlay extends MyLocationOverlay {
 		this.map = mapView;
 		
 		//暫定処理
-		//this.myGp = new GeoPoint(33555169, 130308480);
+		this.myGp =new GeoPoint((int)(33.641491*1e6),(int)(130.689900*1e6));
 	}
 	
 	
@@ -82,11 +83,20 @@ public class MyOverlay extends MyLocationOverlay {
 			//画面に表示されてる範囲（高さ）452-1804<zoomLV22-19>　単位は緯度（経度）の差?
 			Integer top = mapView.getLatitudeSpan();
 			Log.d("draw",top.toString());
+			//表示MAP中央のGP
 			GeoPoint gp = map.getMapCenter();
 			float[] result=new float[1];
 			if(this.myGp!=null){
 				Location.distanceBetween((double)gp.getLatitudeE6()/1e6, (double)gp.getLongitudeE6()/1e6, (double)this.myGp.getLatitudeE6()/1e6, (double)this.myGp.getLongitudeE6()/1e6,result);
-				//家との距離27434.605
+				//家との距離27434.605m
+				Log.d("draw",String.valueOf(result[0]));
+				if(result[0] <= 50 && !this.main.getStamp(0)){
+					Log.d("MyOver","円の中にいます");
+					Toast.makeText(main, "スタンプを取得しました", Toast.LENGTH_SHORT).show();
+					main.setStamp(0);
+					//押すスタンプの判定をわかりやすく
+					//スタンプがfalseの時のみ判定すべき
+				}
 
 				if(!this.isHereMap()){
 
@@ -106,7 +116,7 @@ public class MyOverlay extends MyLocationOverlay {
 			}
 			
 		}
-		
+				
 		return super.draw(canvas, mapView, shadow, when);
 	}
 
@@ -115,7 +125,8 @@ public class MyOverlay extends MyLocationOverlay {
 		// TODO 自動生成されたメソッド・スタブ
 		super.onLocationChanged(location);
 		
-		this.myGp = new GeoPoint((int)(location.getLatitude()*1e6), (int)(location.getLongitude()*1e6));
+		//試験的にあうと
+		//this.myGp = new GeoPoint((int)(location.getLatitude()*1e6), (int)(location.getLongitude()*1e6));
 	
 	}
 
@@ -210,5 +221,10 @@ public class MyOverlay extends MyLocationOverlay {
 	
 	public GeoPoint getMyGP(){
 		return this.myGp;
+	}
+	
+	public void setGeoPoint(GeoPoint p){
+		
+		this.myGp = p;
 	}
 }

@@ -42,11 +42,13 @@ public class MainActivity extends MapActivity {
 	public MapView map;
 	public int weight,height;
 	public ArrayList<Rect> rectList = new ArrayList<Rect>();
-	public boolean[] getStamp = {false,false,false,false,false};
+	private boolean[] getStamp = {false,false,false,false,false};
 	public ArrayList<GeoPoint> gp = new ArrayList<GeoPoint>();
 	
 	public MyLocationOverlay myLocationOverlay;
 	public MyOverlay myOverlay;
+	
+	private final int MOVE = 50;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -154,7 +156,7 @@ public class MainActivity extends MapActivity {
 		return false;
 	}
 
-	public void drawStamp(){      
+	public void drawStamp(){
 		
 		this.rectList.clear();
 		Bitmap bmp = Bitmap.createBitmap(this.weight,this.height/3,Bitmap.Config.ARGB_8888);
@@ -211,7 +213,6 @@ public class MainActivity extends MapActivity {
 			//保持したRectとタッチした点との判定
 			if(r.contains(x.intValue(), y.intValue())){
 				
-				this.getStamp[i]=true;
 				this.ctrl.setCenter(this.gp.get(i));
 			}
 			i++;
@@ -232,5 +233,31 @@ public class MainActivity extends MapActivity {
 			
 	}
 
-    
+	public void arrow(View v){
+		GeoPoint gp = this.myOverlay.getMyGP();
+		int lan = gp.getLatitudeE6();
+		int lon = gp.getLongitudeE6();
+		
+		if(v.getId() == R.id.btntop)
+			lan += MOVE;
+		if(v.getId() == R.id.btnbottom)
+			lan -= MOVE;
+		if(v.getId() == R.id.btnrigth)
+			lon += MOVE;
+		if(v.getId() == R.id.btnleft)
+			lon -= MOVE;
+		
+		this.myOverlay.setGeoPoint(new GeoPoint(lan,lon));
+		this.map.invalidate();
+		
+		
+	}
+	
+	public void  setStamp(int i){
+		this.getStamp[i] = true;
+		this.drawStamp();
+	}
+     public boolean getStamp(int i){
+    	 return this.getStamp[i];
+     }
 }

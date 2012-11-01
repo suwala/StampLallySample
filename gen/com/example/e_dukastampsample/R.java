@@ -25,10 +25,14 @@ public final class R {
     }
     public static final class id {
         public static final int LinearLayout1=0x7f080000;
+        public static final int btnbottom=0x7f080006;
+        public static final int btnleft=0x7f080008;
+        public static final int btnrigth=0x7f080007;
+        public static final int btntop=0x7f080005;
         public static final int button1=0x7f080004;
-        public static final int imageView1=0x7f080005;
-        public static final int mapview=0x7f080006;
-        public static final int menu_settings=0x7f080007;
+        public static final int imageView1=0x7f080009;
+        public static final int mapview=0x7f08000a;
+        public static final int menu_settings=0x7f08000b;
         public static final int textView1=0x7f080003;
         public static final int zoomin=0x7f080001;
         public static final int zoomout=0x7f080002;
