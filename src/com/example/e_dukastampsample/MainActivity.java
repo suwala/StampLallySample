@@ -43,13 +43,15 @@ public class MainActivity extends MapActivity {
 	public int weight,height;
 	public ArrayList<Rect> rectList = new ArrayList<Rect>();
 	private boolean[] getStamp = {false,false,false,false,false};
-	public ArrayList<GeoPoint> gp = new ArrayList<GeoPoint>();
+	public ArrayList<GeoPoint> destinationGP = new ArrayList<GeoPoint>();
+	public int touchIndex;
 	
 	public MyLocationOverlay myLocationOverlay;
 	public MyOverlay myOverlay;
 	
+	//カーソルで移動する距離
 	private final int MOVE = 50;
-	
+		
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,13 +65,13 @@ public class MainActivity extends MapActivity {
         this.map = (MapView)this.findViewById(R.id.mapview);
         this.ctrl = map.getController();
         
-        this.gp.add(new GeoPoint((int)(33.641491*1e6),(int)(130.689182*1e6)));
-        this.gp.add(new GeoPoint((int)(33.644912*1e6),(int)(130.688476*1e6)));
-        this.gp.add(new GeoPoint((int)(33.647413*1e6),(int)(130.689903*1e6)));
-        this.gp.add(new GeoPoint((int)(33.644501*1e6),(int)(130.694001*1e6)));
-        this.gp.add(new GeoPoint((int)(33.643536*1e6),(int)(130.691459*1e6)));
+        this.destinationGP.add(new GeoPoint((int)(33.641491*1e6),(int)(130.689182*1e6)));
+        this.destinationGP.add(new GeoPoint((int)(33.644912*1e6),(int)(130.688476*1e6)));
+        this.destinationGP.add(new GeoPoint((int)(33.647413*1e6),(int)(130.689903*1e6)));
+        this.destinationGP.add(new GeoPoint((int)(33.644501*1e6),(int)(130.694001*1e6)));
+        this.destinationGP.add(new GeoPoint((int)(33.643536*1e6),(int)(130.691459*1e6)));
         
-        ctrl.setCenter(this.gp.get(0));
+        ctrl.setCenter(this.destinationGP.get(0));
         ctrl.setZoom(19);
                
         this.myOverlay = new MyOverlay(this, this.map);
@@ -91,7 +93,7 @@ public class MainActivity extends MapActivity {
         		Log.d("main","main");
         	}
         });
-        //コンパスの有効化　描画もされる
+        //コンパスの有効化　凄い勢いで描画が繰り返されるので電池消耗が激しそう
         //this.myOverlay.enableCompass();
         
         
@@ -185,7 +187,7 @@ public class MainActivity extends MapActivity {
         	//Rect rect = new Rect(x, y, x+bmp2.getWidth(), y+bmp2.getHeight());
         	
         	canvas.drawBitmap(bmp2, new Rect(0,0,bmp2.getWidth(),bmp2.getHeight()), rect,null);
-        	Log.d("draw",rect.toString());
+        	//Log.d("draw",rect.toString());
         	
         	//iv.getTop()　ImageViewの画面上における座標を返す
         	this.rectList.add(new Rect(rect.left,rect.top+iv.getTop(),rect.right,rect.bottom+iv.getTop()));
@@ -213,13 +215,14 @@ public class MainActivity extends MapActivity {
 			//保持したRectとタッチした点との判定
 			if(r.contains(x.intValue(), y.intValue())){
 				
-				this.ctrl.setCenter(this.gp.get(i));
+				this.ctrl.setCenter(this.destinationGP.get(i));
+				this.touchIndex = i;
 			}
 			i++;
 		}
 
 		this.drawStamp();
-		GeoPoint gp = this.myOverlay.getMyGeoPoint();
+		this.map.invalidate();
 		
 		return super.onTouchEvent(event);
 	}
@@ -252,12 +255,12 @@ public class MainActivity extends MapActivity {
 		
 		
 	}
-	
+
 	public void  setStamp(int i){
 		this.getStamp[i] = true;
 		this.drawStamp();
 	}
-     public boolean getStamp(int i){
-    	 return this.getStamp[i];
-     }
+	public boolean getStamp(int i){
+		return this.getStamp[i];
+	}
 }

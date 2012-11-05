@@ -21,7 +21,7 @@ public class OverlayPlus extends Overlay implements GestureDetector.OnGestureLis
 	
 	public OverlayPlus(MainActivity _main){
 		this.main = _main;
-		this.gp = main.gp;
+		this.gp = main.destinationGP;
 	}
 	
 	@Override
